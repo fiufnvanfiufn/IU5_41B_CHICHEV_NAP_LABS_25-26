@@ -75,54 +75,47 @@ document.getElementById("btn_op_div").onclick = function() {
 
 document.getElementById("btn_op_sign").onclick = function() {
     if (!selectedOperation && a !== '') {
-        a = (parseFloat(a) * -1).toString()
+        a = ((+a) * -1).toString()
         outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
-        b = (parseFloat(b) * -1).toString()
+        b = ((+b) * -1).toString()
         outputElement.innerHTML = b
 
     } else if (lastResult !== '') {
-        lastResult = (parseFloat(lastResult) * -1).toString()
+        lastResult = ((+lastResult) * -1).toString()
         a = lastResult
         outputElement.innerHTML = a
     }
 }
 
 document.getElementById("btn_op_inverse").onclick = function() {
-    let currentNum
-
     if (!selectedOperation && a !== '') {
-        currentNum = parseFloat(a)
-
-        if (currentNum === 0) {
+        if ((+a) === 0) {
             outputElement.innerHTML = 'Ошибка'
             return
         }
 
-        a = (1 / currentNum).toString()
+        a = (1 / (+a)).toString()
         outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
-        currentNum = parseFloat(b)
-
-        if (currentNum === 0) {
+        if ((+b) === 0) {
             outputElement.innerHTML = 'Ошибка'
             return
         }
 
-        b = (1 / currentNum).toString()
+        b = (1 / (+b)).toString()
         outputElement.innerHTML = b
 
     } else if (lastResult !== '') {
-        currentNum = parseFloat(lastResult)
 
-        if (currentNum === 0) {
+        if ((+lastResult) === 0) {
             outputElement.innerHTML = 'Ошибка'
             return
         }
 
-        lastResult = (1 / currentNum).toString()
+        lastResult = (1 / (+lastResult)).toString()
         a = lastResult
         selectedOperation = null
         outputElement.innerHTML = a
@@ -142,15 +135,15 @@ document.getElementById("btn_op_del").onclick = function() {
 
 document.getElementById("btn_op_sqrt").onclick = function() {
     if (!selectedOperation && a !== '') {
-        a = Math.sqrt(parseFloat(a)).toString()
+        a = Math.sqrt((+a)).toString()
         outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
-        b = Math.sqrt(parseFloat(b)).toString()
+        b = Math.sqrt((+b)).toString()
         outputElement.innerHTML = b
 
     } else if (lastResult !== '') {
-        lastResult = Math.sqrt(parseFloat(lastResult)).toString()
+        lastResult = Math.sqrt((+lastResult)).toString()
         a = lastResult
         selectedOperation = null
         outputElement.innerHTML = a
@@ -159,15 +152,15 @@ document.getElementById("btn_op_sqrt").onclick = function() {
 
 document.getElementById("btn_op_secdg").onclick = function() {
     if (!selectedOperation && a !== '') {
-        a = Math.pow(parseFloat(a), 2).toString()
+        a = Math.pow((+a), 2).toString()
         outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
-        b = Math.pow(parseFloat(b), 2).toString()
+        b = Math.pow((+b), 2).toString()
         outputElement.innerHTML = b
 
     } else if (lastResult !== '') {
-        lastResult = Math.pow(parseFloat(lastResult), 2).toString()
+        lastResult = Math.pow((+lastResult), 2).toString()
         a = lastResult
         selectedOperation = null
         outputElement.innerHTML = a
@@ -187,25 +180,22 @@ function calculateResult() {
         return
     }
 
-    const numA = parseFloat(a)
-    const numB = parseFloat(b)
-
     switch(selectedOperation) {
         case '+':
-            expressionResult = numA + numB
+            expressionResult = (+a) + (+b)
             break
         case '-':
-            expressionResult = numA - numB
+            expressionResult = (+a) - (+b)
             break
         case 'x':
-            expressionResult = numA * numB
+            expressionResult = (+a) * (+b)
             break
         case '/':
-            if (numB === 0) {
+            if ((+b) === 0) {
                 outputElement.innerHTML = 'Ошибка'
                 return
             }
-            expressionResult = numA / numB
+            expressionResult = (+a) / (+b)
             break
     }
 
@@ -228,13 +218,13 @@ document.getElementById("btn_op_equal").onclick = function() {
 document.getElementById("btn_op_factorial").onclick = function() {
     let num
     if (!selectedOperation && a !== '') {
-        num = parseInt(a)
+        num = (+a)
 
     } else if (selectedOperation && b !== '') {
-        num = parseInt(b)
+        num = (+b)
 
     } else if (lastResult !== '') {
-        num = parseInt(lastResult)
+        num = (+lastResult)
 
     } else {
         return
