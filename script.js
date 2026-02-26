@@ -11,6 +11,11 @@ outputElement = document.getElementById("result")
 
 digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]')
 
+function fact(n) {
+    if (n == 0) return 1
+    return fact(n - 1)
+}
+
 function onDigitButtonClicked(digit) {
     if (!selectedOperation) {
         if ((digit != '.') || (digit == '.' && !a.includes(digit))) {
@@ -125,11 +130,11 @@ document.getElementById("btn_op_inverse").onclick = function() {
 document.getElementById("btn_op_del").onclick = function() {
     if (!selectedOperation && a !== '') {
         a = a.slice(0, -1)
-        outputElement.innerHTML = a || '0'
+        outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
         b = b.slice(0, -1)
-        outputElement.innerHTML = b || '0'
+        outputElement.innerHTML = b
     }
 }
 
@@ -179,7 +184,6 @@ function calculateResult() {
     if (a === '' || b === '' || !selectedOperation) {
         return
     }
-
     switch(selectedOperation) {
         case '+':
             expressionResult = (+a) + (+b)
@@ -191,22 +195,16 @@ function calculateResult() {
             expressionResult = (+a) * (+b)
             break
         case '/':
-            if ((+b) === 0) {
-                outputElement.innerHTML = 'Ошибка'
-                return
-            }
             expressionResult = (+a) / (+b)
             break
     }
 
     a = expressionResult.toString()
-
     if (isAccumulativeMode) {
         b = a
     } else {
         b = ''
     }
-
     outputElement.innerHTML = a
 }
 
@@ -235,10 +233,7 @@ document.getElementById("btn_op_factorial").onclick = function() {
         return
     }
 
-    let factorial = 1
-    for (let i = 2; i <= num; i++) {
-        factorial *= i
-    }
+    let factorial = fact(num)
 
     if (!selectedOperation && a !== '') {
         a = factorial.toString()
