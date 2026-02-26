@@ -1,11 +1,11 @@
 window.onload = function(){
 
-const MAX_LENGTH = 10
-
 let a = ''
 let b = ''
 let expressionResult = ''
 let selectedOperation = null
+let isAccumulativeMode = false
+let lastResult = ''
 
 outputElement = document.getElementById("result")
 
@@ -38,11 +38,35 @@ document.getElementById("btn_op_mult").onclick = function() {
 }
 document.getElementById("btn_op_plus").onclick = function() {
     if (a === '') return
+    if (selectedOperation === '+') {
+        isAccumulativeMode = true
+
+        if (b === '') {
+            b = a
+        }
+        calculateResult()
+    } else {
+        isAccumulativeMode = false
+    }
     selectedOperation = '+'
+    lastOperand = a
+    b = ''
 }
 document.getElementById("btn_op_minus").onclick = function() {
     if (a === '') return
+    if (selectedOperation === '-') {
+        isAccumulativeMode = true
+
+        if (b === '') {
+            b = a
+        }
+        calculateResult()
+    } else {
+        isAccumulativeMode = false
+    }
     selectedOperation = '-'
+    lastOperand = a
+    b = ''
 }
 document.getElementById("btn_op_div").onclick = function() {
     if (a === '') return
@@ -65,14 +89,43 @@ document.getElementById("btn_op_sign").onclick = function() {
     }
 }
 
-document.getElementById("btn_op_percent").onclick = function() {
+document.getElementById("btn_op_inverse").onclick = function() {
+    let currentNum
+
     if (!selectedOperation && a !== '') {
-        a = (parseFloat(a) / 100).toString()
+        currentNum = parseFloat(a)
+
+        if (currentNum === 0) {
+            outputElement.innerHTML = 'Ошибка'
+            return
+        }
+
+        a = (1 / currentNum).toString()
         outputElement.innerHTML = a
 
     } else if (selectedOperation && b !== '') {
-        b = (parseFloat(b) / 100).toString()
+        currentNum = parseFloat(b)
+
+        if (currentNum === 0) {
+            outputElement.innerHTML = 'Ошибка'
+            return
+        }
+
+        b = (1 / currentNum).toString()
         outputElement.innerHTML = b
+
+    } else if (lastResult !== '') {
+        currentNum = parseFloat(lastResult)
+
+        if (currentNum === 0) {
+            outputElement.innerHTML = 'Ошибка'
+            return
+        }
+
+        lastResult = (1 / currentNum).toString()
+        a = lastResult
+        selectedOperation = null
+        outputElement.innerHTML = a
     }
 }
 
@@ -129,30 +182,47 @@ document.getElementById("btn_op_clear").onclick = function() {
     outputElement.innerHTML = 0
 }
 
-document.getElementById("btn_op_equal").onclick = function() {
-    if (a === '' || b === '' || !selectedOperation)
+function calculateResult() {
+    if (a === '' || b === '' || !selectedOperation) {
         return
+    }
+
+    const numA = parseFloat(a)
+    const numB = parseFloat(b)
 
     switch(selectedOperation) {
-        case 'x':
-            expressionResult = (+a) * (+b)
-            break;
         case '+':
-            expressionResult = (+a) + (+b)
-            break;
+            expressionResult = numA + numB
+            break
         case '-':
-            expressionResult = (+a) - (+b)
-            break;
+            expressionResult = numA - numB
+            break
+        case 'x':
+            expressionResult = numA * numB
+            break
         case '/':
-            expressionResult = (+a) / (+b)
-            break;
+            if (numB === 0) {
+                outputElement.innerHTML = 'Ошибка'
+                return
+            }
+            expressionResult = numA / numB
+            break
     }
 
     a = expressionResult.toString()
-    b = ''
-    selectedOperation = null
+
+    if (isAccumulativeMode) {
+        b = a
+    } else {
+        b = ''
+    }
 
     outputElement.innerHTML = a
+}
+
+document.getElementById("btn_op_equal").onclick = function() {
+    calculateResult()
+    isAccumulativeMode = false
 }
 
 document.getElementById("btn_op_factorial").onclick = function() {
@@ -193,6 +263,21 @@ document.getElementById("btn_op_factorial").onclick = function() {
         a = lastResult
         selectedOperation = null
         outputElement.innerHTML = a
+    }
+}
+
+const themeToggle = document.getElementById("btn_switch_theme")
+
+document.body.className = 'dark-theme'
+themeToggle.innerHTML = 'Светлая тема'
+
+themeToggle.onclick = function() {
+    if (document.body.classList.contains('dark-theme')) {
+        document.body.className = 'light-theme'
+        themeToggle.innerHTML = 'Темная тема'
+    } else {
+        document.body.className = 'dark-theme'
+        themeToggle.innerHTML = 'Светлая тема'
     }
 }
 
