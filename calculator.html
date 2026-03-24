@@ -1,85 +1,72 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Калькулятор</title>
+  <title>Астрологический Калькулятор</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="calculator">
-
-      <div id="result" class="result">
-          0
-      </div>
+  <div class="calculator">
+    <div id="oracle_output" class="result">0</div>
 
     <div>
       <div>
-        <button id="btn_op_clear" class="my-btn secondary">C</button>
-        <button id="btn_op_sign" class="my-btn secondary">+/-</button>
-        <button id="btn_op_inverse" class="my-btn secondary">x⁻¹</button>
-        <button id="btn_op_div" class="my-btn primary">/</button>
-        <button id="btn_op_del" class="my-btn primary">del</button>
+        <button id="cosmic_clear" class="my-btn secondary">C</button>
+        <button id="aspect_sign" class="my-btn secondary">+/-</button>
+        <button id="orbit_inverse" class="my-btn secondary">x⁻¹</button>
+        <button id="orbit_div" class="my-btn primary">/</button>
+        <button id="cosmic_del" class="my-btn primary">del</button>
       </div>
 
       <div>
-        <button id="btn_digit_7" class="my-btn">7</button>
-        <button id="btn_digit_8" class="my-btn">8</button>
-        <button id="btn_digit_9" class="my-btn">9</button>
-        <button id="btn_op_mult" class="my-btn primary">x</button>
-        <button id="btn_op_sqrt" class="my-btn primary">√</button>
+        <button id="star_7" class="my-btn">7</button>
+        <button id="star_8" class="my-btn">8</button>
+        <button id="star_9" class="my-btn">9</button>
+        <button id="orbit_mult" class="my-btn primary">x</button>
+        <button id="orbit_sqrt" class="my-btn primary">√</button>
       </div>
 
       <div>
-        <button id="btn_digit_4" class="my-btn">4</button>
-        <button id="btn_digit_5" class="my-btn">5</button>
-        <button id="btn_digit_6" class="my-btn">6</button>
-        <button id="btn_op_minus" class="my-btn primary">-</button>
-        <button id="btn_op_secdg" class="my-btn primary">x²</button>
+        <button id="star_4" class="my-btn">4</button>
+        <button id="star_5" class="my-btn">5</button>
+        <button id="star_6" class="my-btn">6</button>
+        <button id="orbit_minus" class="my-btn primary">-</button>
+        <button id="orbit_secdg" class="my-btn primary">x²</button>
       </div>
 
       <div>
-        <button id="btn_digit_1" class="my-btn">1</button>
-        <button id="btn_digit_2" class="my-btn">2</button>
-        <button id="btn_digit_3" class="my-btn">3</button>
-        <button id="btn_op_plus" class="my-btn primary">+</button>
-        <button id="btn_op_factorial" class="my-btn primary">x!</button>
+        <button id="star_1" class="my-btn">1</button>
+        <button id="star_2" class="my-btn">2</button>
+        <button id="star_3" class="my-btn">3</button>
+        <button id="orbit_plus" class="my-btn primary">+</button>
+        <button id="orbit_factorial" class="my-btn primary">x!</button>
       </div>
 
       <div>
-        <button id="btn_digit_0" class="my-btn">0</button>
-        <button id="btn_digit_000" class="my-btn">000</button>
-        <button id="btn_digit_dot" class="my-btn">.</button>
-        <button id="btn_op_equal" class="my-btn primary execute">=</button>
-
+        <button id="star_0" class="my-btn">0</button>
+        <button id="star_000" class="my-btn">000</button>
+        <button id="star_dot" class="my-btn">.</button>
+        <button id="oracle_equal" class="my-btn primary execute">=</button>
       </div>
     </div>
   </div>
 
-  <div id="tech">
+  <div id="astral_tech">
     <a href="https://github.com/fiufnvanfiufn/IU5_41B_CHICHEV_NAP_LABS_25-26.git">
       <button class="git_btn">GitHub</button>
     </a>
-
-    <details id="information">
+    <details id="author_scroll">
       <summary>Информация об авторе</summary>
       <p>Выполнил студент группы ИУ5-41 Чичёв Иван</p>
     </details>
   </div>
 
-  <div id="theme_switcher">
-    <button id="btn_switch_theme" class="switch_theme">Сменить тему</button>
+  <div id="universe_switcher">
+    <button id="btn_nebula_theme" class="switch_theme">Сменить тему</button>
   </div>
 
   <div class="lab-purpose">
     <p>
-      Цель данной лабораторной работы -
-      <mark>знакомство</mark> с инструментами построения
-      пользовательских интерфейсов web-сайтов:
-      <mark>HTML</mark>, <mark>CSS</mark>.
-      В ходе выполнения работы, вам предстоит ознакомиться
-      с кодом реализации простого калькулятора, и затем
-      выполнить задания по варианту.
+      Цель данной лабораторной работы - <mark>знакомство</mark> с инструментами HTML и CSS.
     </p>
   </div>
   <script src="script.js"></script>
