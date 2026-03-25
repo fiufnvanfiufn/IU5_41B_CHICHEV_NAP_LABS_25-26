@@ -5,14 +5,53 @@ export class MainPage {
     constructor(parent) {
         this.parent = parent;
         this.data = this.getData();
+        this.filteredData = [...this.data];
     }
 
     getData() {
         return [
-            { id: 1, src: "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png", title: "Гороскоп еды", text: "Узнайте, какая еда сегодня принесет вам удачу." },
-            { id: 2, src: "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg", title: "Ежедневный гороскоп", text: "Узнайте ежедневный гороскоп для вас на сегодня." },
-            { id: 3, src: "https://i.redd.it/tdz95mj3a0g51.jpg", title: "Небо сегодня", text: "Узнайте соприкосновение небесных тел на небе сегодня." },
+            { id: 1, src: "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png", title: "Гороскоп еды", tags: ['Удача', 'Завтрак'], nums: [5, 6, 2, 7, 4], text: "Узнайте, какая еда сегодня принесет вам удачу." },
+            { id: 2, src: "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg", title: "Ежедневный гороскоп", tags: ['Звезды', 'Судьба'], nums: [10, 2, 3, 8, 1], text: "Узнайте ежедневный гороскоп для вас на сегодня." },
+            { id: 3, src: "https://novostipmr.com/sites/default/files/field/image/201807/1524154364_ui-59bf3e630e0dc9.17432988.jpeg", title: "Небо сегодня", tags: ['Планеты', 'Транзит'], nums: [4, 9, 2, 5, 6], text: "Узнайте соприкосновение небесных тел на небе сегодня." },
         ];
+    }
+
+    filterData() {
+        const searchValue = document.getElementById('search-input').value.toLowerCase();
+        const tagValue = document.getElementById('tag-filter').value;
+
+        this.filteredData = this.data.filter(item => {
+            const matchesSearch = item.title.toLowerCase().includes(searchValue);
+            const matchesTag = tagValue === 'all' || item.tags.includes(tagValue);
+            return matchesSearch && matchesTag;
+        });
+
+        this.renderProducts();
+    }
+
+    renderProducts() {
+        const productList = document.getElementById('main-page');
+        if (!productList) return;
+
+        productList.innerHTML = '';
+        this.filteredData.forEach((item) => {
+            const productCard = new ProductCardComponent(productList);
+            productCard.render(
+                item,
+                this.clickCard.bind(this),
+                this.onDeleteCard.bind(this),
+                this.onMoveToTop.bind(this)
+            );
+        });
+    }
+
+    onMoveToTop(id) {
+        const index = this.data.findIndex(item => item.id === id);
+        if (index !== -1) {
+            const element = this.data.splice(index, 1)[0];
+            this.data.unshift(element);
+            this.filterData();
+        }
     }
 
     onAddCard() {
@@ -21,35 +60,52 @@ export class MainPage {
             const newItem = {
                 ...firstItem,
                 id: Date.now(),
-                title: `${firstItem.title}`
+                title: `${firstItem.title} (копия)`
             };
             this.data.push(newItem);
-            this.render();
+            this.filterData();
         }
     }
 
     onDeleteCard(id) {
         this.data = this.data.filter(item => item.id !== Number(id));
-        this.render();
+        this.filterData();
     }
 
     clickCard(e) {
-        const cardId = e.target.dataset.id;
+        const cardId = e.currentTarget.dataset.id || e.target.closest('button').dataset.id;
         const productPage = new ProductPage(this.parent, cardId);
         productPage.render();
-    }
-
-    get pageRoot() {
-        return document.getElementById('main-page');
     }
 
     getHTML() {
         return `
             <div style="background-color: #050714; min-height: 100vh; padding-top: 20px;">
                 <div class="container">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 style="color: #ffcc33;">Наши услуги</h2>
-                        <button id="add-card-btn" class="btn" style="background-color: #ffcc33; color: #050714; font-weight: bold; border-radius: 10px;">Добавить услугу</button>
+                    <div class="row g-3 mb-4 align-items-center">
+                        <div class="col-md-3">
+                            <h2 style="color: #ffcc33; margin: 0;">Наши услуги</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="search-input" class="form-control"
+                                   style="background: #1a1b3a; border: 1px solid #4b4d8a; color: white !important;"
+                                   placeholder="Поиск по названию...">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="tag-filter" class="form-select"
+                                    style="background: #1a1b3a; border: 1px solid #4b4d8a; color: white !important;">
+                                <option value="all">Все теги</option>
+                                <option value="Удача">Удача</option>
+                                <option value="Звезды">Звезды</option>
+                                <option value="Планеты">Планеты</option>
+                                <option value="Завтрак">Завтрак</option>
+                                <option value="Судьба">Судьба</option>
+                                <option value="Транзит">Транзит</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <button id="add-card-btn" class="btn w-100" style="background-color: #ffcc33; color: #050714; font-weight: bold; border-radius: 10px;">Добавить</button>
+                        </div>
                     </div>
                     <div id="main-page" class="row row-cols-1 row-cols-md-3 g-4 justify-content-start"></div>
                 </div>
@@ -60,11 +116,10 @@ export class MainPage {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
 
+        document.getElementById('search-input').addEventListener('input', () => this.filterData());
+        document.getElementById('tag-filter').addEventListener('change', () => this.filterData());
         document.getElementById('add-card-btn').addEventListener('click', () => this.onAddCard());
 
-        this.data.forEach((item) => {
-            const productCard = new ProductCardComponent(this.pageRoot);
-            productCard.render(item, this.clickCard.bind(this), this.onDeleteCard.bind(this));
-        });
+        this.renderProducts();
     }
 }
