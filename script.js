@@ -180,4 +180,44 @@ window.onload = function() {
             themeToggle.innerHTML = 'Светлая тема'
         }
     }
+
+    document.getElementById("btn_get_moon").onclick = function() {
+    const dateInput = document.getElementById("moon_date_input").value;
+    if (!dateInput) {
+        document.getElementById("moon_result").innerHTML = "Введите дату!";
+        return;
+    }
+
+    const date = new Date(dateInput);
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if (month < 3) {
+        year--;
+        month += 12;
+    }
+
+    let c = 365.25 * year;
+    let e = 30.6 * month;
+    let jd = c + e + day - 694039.09;
+    jd /= 29.5305882;
+    let b = parseInt(jd);
+    jd -= b;
+    let phase = Math.round(jd * 8);
+
+    const phases = [
+        "Новолуние",
+        "Растущий серп",
+        "Первая четверть",
+        "Растущая луна",
+        "Полнолуние",
+        "Убывающая луна",
+        "Последняя четверть",
+        "Старая луна",
+        "Новолуние"
+    ];
+
+    document.getElementById("moon_result").innerHTML = phases[phase];
+};
 };
