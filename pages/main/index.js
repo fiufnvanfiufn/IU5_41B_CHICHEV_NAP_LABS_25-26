@@ -16,18 +16,7 @@ export class MainPage {
         ];
     }
 
-    filterData() {
-        const searchValue = document.getElementById('search-input').value.toLowerCase();
-        const tagValue = document.getElementById('tag-filter').value;
 
-        this.filteredData = this.data.filter(item => {
-            const matchesSearch = item.title.toLowerCase().includes(searchValue);
-            const matchesTag = tagValue === 'all' || item.tags.includes(tagValue);
-            return matchesSearch && matchesTag;
-        });
-
-        this.renderProducts();
-    }
 
     renderProducts() {
         const productList = document.getElementById('product-list');
@@ -52,6 +41,19 @@ export class MainPage {
             this.data.unshift(element);
             this.filterData();
         }
+    }
+
+    filterData() {
+        const searchValue = document.getElementById('search-input').value.toLowerCase();
+        const tagValue = document.getElementById('tag-filter').value;
+
+        this.filteredData = this.data.filter(item => {
+            const matchesSearch = item.title.toLowerCase().includes(searchValue);
+            const matchesTag = tagValue === 'all' || item.tags.includes(tagValue);
+            return matchesSearch && matchesTag;
+        });
+
+        this.renderProducts();
     }
 
     onAddCard() {
