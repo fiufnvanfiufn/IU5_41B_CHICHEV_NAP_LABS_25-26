@@ -1,9 +1,10 @@
-import {ProductCardComponent} from "../../components/product-card/index.js";
-import {ProductPage} from "../product/index.js";
+import { ProductCardComponent } from "../../components/product-card/index.js";
+import { ProductPage } from "../product/index.js";
 
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
+        this.data = this.getData();
     }
 
     getData() {
@@ -26,38 +27,57 @@ export class MainPage {
                 title: "Небо сегодня",
                 text: "Узнайте соприкосновение небесных тел на небе сегодня."
             },
-        ]
+        ];
     }
 
-render() {
-    this.parent.innerHTML = ''
-    const html = this.getHTML()
-    this.parent.insertAdjacentHTML('beforeend', html)
-
-    const data = this.getData()
-    data.forEach((item) => {
-        const productCard = new ProductCardComponent(this.pageRoot)
-        productCard.render(item, this.clickCard.bind(this))
-    })
-}
-
-    get pageRoot() {
-        return document.getElementById('main-page')
+    onAddCard() {
+        if (this.data.length > 0) {
+            const firstItem = this.data[0];
+            const newItem = {
+                ...firstItem,
+                id: Date.now(),
+                title: `${firstItem.title} (Копия)`
+            };
+            this.data.push(newItem);
+            this.render();
+        }
     }
 
-    getHTML() {
-        return (
-            `
-                <div id="main-page" class="d-flex flex-wrap"><div/>
-            `
-        )
+    onDeleteCard(id) {
+        this.data = this.data.filter(item => item.id !== Number(id));
+        this.render();
     }
 
     clickCard(e) {
-    const cardId = e.target.dataset.id
+        const cardId = e.target.dataset.id;
+        const productPage = new ProductPage(this.parent, cardId);
+        productPage.render();
+    }
 
-    const productPage = new ProductPage(this.parent, cardId)
-    productPage.render()
-        }
+    get pageRoot() {
+        return document.getElementById('main-page');
+    }
 
+    getHTML() {
+        return `
+            <div class="container mt-3">
+                <div class="d-flex justify-content-center mb-3">
+                    <button id="add-card-btn" class="btn btn-success">Добавить услугу</button>
+                </div>
+                <div id="main-page" class="d-flex flex-wrap justify-content-center"></div>
+            </div>`;
+    }
+
+    render() {
+        this.parent.innerHTML = '';
+        const html = this.getHTML();
+        this.parent.insertAdjacentHTML('beforeend', html);
+
+        document.getElementById('add-card-btn').addEventListener('click', () => this.onAddCard());
+
+        this.data.forEach((item) => {
+            const productCard = new ProductCardComponent(this.pageRoot);
+            productCard.render(item, this.clickCard.bind(this), this.onDeleteCard.bind(this));
+        });
+    }
 }
