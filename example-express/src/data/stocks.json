@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "src": "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png",
+    "title": "Гороскоп еды",
+    "text": "Узнайте, какая еда сегодня принесет вам удачу.",
+    "tags": ["Удача", "Завтрак"],
+    "nums": [5, 6, 2, 7, 4]
+  },
+  {
+    "id": 2,
+    "src": "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg",
+    "title": "Ежедневный гороскоп",
+    "text": "Узнайте ежедневный гороскоп для вас на сегодня.",
+    "tags": ["Звезды", "Судьба"],
+    "nums": [10, 2, 3, 8, 1]
+  },
+  {
+    "id": 3,
+    "src": "https://novostipmr.com/sites/default/files/field/image/201807/1524154364_ui-59bf3e630e0dc9.17432988.jpeg",
+    "title": "Небо сегодня",
+    "text": "Узнайте соприкосновение небесных тел на небе сегодня.",
+    "tags": ["Планеты", "Транзит"],
+    "nums": [4, 9, 2, 5, 6]
+  }
+]
