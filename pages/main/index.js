@@ -12,7 +12,7 @@ export class MainPage {
         return [
             { id: 1, src: "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png", title: "Гороскоп еды", tags: ['Удача', 'Завтрак'], nums: [5, 6, 2, 7, 4], text: "Узнайте, какая еда сегодня принесет вам удачу." },
             { id: 2, src: "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg", title: "Ежедневный гороскоп", tags: ['Звезды', 'Судьба'], nums: [10, 2, 3, 8, 1], text: "Узнайте ежедневный гороскоп для вас на сегодня." },
-            { id: 3, src: "https://novostipmr.com/sites/default/files/field/image/201807/1524154364_ui-59bf3e630e0dc9.17432988.jpeg", title: "Небо сегодня", tags: ['Планеты', 'Транзит'], nums: [4, 9, 2, 5, 6], text: "Узнайте соприкосновение небесных тел на небе сегодня." },
+            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Небо сегодня", tags: ['Планеты', 'Транзит'], nums: [4, 9, 2, 5, 6], text: "Узнайте соприкосновение небесных тел на небе сегодня." },
         ];
     }
 
