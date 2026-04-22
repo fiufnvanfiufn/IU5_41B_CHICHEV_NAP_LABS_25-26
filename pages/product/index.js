@@ -2,33 +2,140 @@ import { ProductComponent } from "../../components/product/index.js";
 import { BackButtonComponent } from "../../components/back-button/index.js";
 import { MainPage } from "../main/index.js";
 
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
 export class ProductPage {
-    constructor(parent, id) {
+    constructor(parent, id, data) {
         this.parent = parent;
         this.id = id;
+        this.data = data;
+
+        this.model = null;
+        this.controls = null;
+        this.camera = null;
     }
 
     getData() {
-        const data = [
-            { id: 1, src: "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png", title: "Гороскоп еды", text: "Узнайте, какая еда сегодня принесет вам удачу." },
-            { id: 2, src: "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg", title: "Ежедневный гороскоп", text: "Узнайте ежедневный гороскоп для вас на сегодня." },
-            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Небо сегодня", text: "Узнайте соприкосновение небесных тел на небе сегодня." },
-        ];
-        return data.find(item => item.id === Number(this.id));
+        return this.data.find(item => item.id == this.id);
     }
 
     get pageRoot() {
-        return document.getElementById('product-page');
-    }
-
-    getHTML() {
-        return `<div id="product-page" style="background-color: #050714; min-height: 100vh; padding: 20px;"></div>`;
+        return document.getElementById("product-page");
     }
 
     clickBack() {
         const mainPage = new MainPage(this.parent);
         mainPage.render();
     }
+
+    getHTML() {
+        return `
+        <div style="background:black; min-height:100vh; color:white; padding:20px;">
+
+            <div id="product-page"></div>
+
+            <!-- панель управления -->
+            <div style="margin:15px 0; display:flex; gap:10px; flex-wrap:wrap;">
+                <button id="zoom-in">+</button>
+                <button id="zoom-out">-</button>
+
+                <button id="front">Front</button>
+                <button id="back">Back</button>
+                <button id="left">Left</button>
+                <button id="right">Right</button>
+            </div>
+
+            <div id="model-container"
+                 style="width:500px;height:500px;background:#111;margin-top:10px;">
+            </div>
+
+        </div>`;
+    }
+
+init3DModel() {
+    console.log("init3DModel started");
+
+    const container = document.getElementById("model-container");
+    if (!container) return console.error("No container");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xdddddd);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(5, 5, 5);
+    scene.add(dirLight);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+    this.camera = new THREE.PerspectiveCamera(
+        75,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+    );
+    this.camera.position.set(0, 1, 3);
+
+    const updateSize = () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        renderer.setSize(width, height);
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+    };
+
+    updateSize();
+    container.appendChild(renderer.domElement);
+
+    this.controls = new OrbitControls(this.camera, renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.target.set(0, 0, 0);
+
+    const loader = new GLTFLoader();
+    loader.load(
+        "./models/Jupiter.glb",
+        (gltf) => {
+            const model = gltf.scene;
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const center = box.getCenter(new THREE.Vector3());
+
+            model.position.sub(center);
+            scene.add(model);
+
+            const distance = size * 2;
+            this.camera.position.z = distance;
+            this.controls.target.copy(center);
+            this.controls.update();
+
+            console.log("Model loaded, size:", size);
+        },
+        (progress) => console.log("Loading:", (progress.loaded / progress.total * 100) + '%'),
+        (error) => console.error("Load error:", error)
+    );
+
+    window.addEventListener('resize', updateSize);
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        this.controls.update();
+        renderer.render(scene, this.camera);
+    };
+    animate();
+
+    document.getElementById("zoom-in").onclick = () => {
+        this.camera.position.z -= 0.5;
+    };
+    document.getElementById("zoom-out").onclick = () => {
+        this.camera.position.z += 0.5;
+    };
+    document.getElementById("front").onclick = () => this.camera.position.set(0, 1, 3);
+    document.getElementById("back").onclick = () => this.camera.position.set(0, 1, -3);
+    document.getElementById("left").onclick = () => this.camera.position.set(-3, 1, 0);
+    document.getElementById("right").onclick = () => this.camera.position.set(3, 1, 0);
+}
 
     render() {
         this.parent.innerHTML = this.getHTML();
@@ -39,5 +146,7 @@ export class ProductPage {
         const data = this.getData();
         const product = new ProductComponent(this.pageRoot);
         product.render(data);
+
+        this.init3DModel();
     }
 }
