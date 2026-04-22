@@ -31,7 +31,7 @@ export class ProductPage {
     </div>`;
 }
 
-    clickBack() {
+    clickBackToPlanets() {
         const mainPage = new MainPage(this.parent);
         mainPage.render();
     }
@@ -40,7 +40,7 @@ export class ProductPage {
         this.parent.innerHTML = this.getHTML();
 
         const backButton = new BackButtonComponent(this.pageRoot);
-        backButton.render(this.clickBack.bind(this));
+        backButton.render(this.clickBackToPlanets.bind(this));
 
         const data = this.getData();
         const product = new ProductComponent(this.pageRoot);
