@@ -12,7 +12,7 @@ export class BackButtonComponent {
     getHTML() {
         return (
             `
-                <button id="back-button" class="btn btn-primary" type="button">Назад</button>
+                <button id="back-button" class="btn btn-primary style="background-color:black; margin:0px; padding:0px" type="button">Назад</button>
             `
         )
     }

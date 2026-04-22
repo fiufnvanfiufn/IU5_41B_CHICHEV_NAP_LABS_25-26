@@ -10,9 +10,12 @@ export class MainPage {
 
     getData() {
         return [
-            { id: 1, src: "https://cafebrynza.ru/images/articles/5-poleznykh-svojstv-goryachej-edy_66a272bd082bc2.png", title: "Гороскоп еды", tags: ['Удача', 'Завтрак'], nums: [5, 6, 2, 7, 4], text: "Узнайте, какая еда сегодня принесет вам удачу." },
-            { id: 2, src: "https://www.tvrus.eu/wp-content/uploads/2025/05/goroskop-22-maya--960x639.jpg", title: "Ежедневный гороскоп", tags: ['Звезды', 'Судьба'], nums: [10, 2, 3, 8, 1], text: "Узнайте ежедневный гороскоп для вас на сегодня." },
-            { id: 3, src: "https://novostipmr.com/sites/default/files/field/image/201807/1524154364_ui-59bf3e630e0dc9.17432988.jpeg", title: "Небо сегодня", tags: ['Планеты', 'Транзит'], nums: [4, 9, 2, 5, 6], text: "Узнайте соприкосновение небесных тел на небе сегодня." },
+            { id: 1, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/960px-Venus_from_Mariner_10.jpg", title: "Венера", tags: ['Любовь и отношения', 'Финансовая стабильность'], nums: [5, 6, 2, 7, 4], text: "Она определяет, как человек выражает чувства, его эстетические вкусы, отношение к материальным ценностям и выбор партнера." },
+            { id: 2, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/960px-Mars_Valles_Marineris_EDIT.jpg", title: "Марс", tags: ['Достижение', 'Источник личной энергии'], nums: [5, 6, 2, 7, 4], text: "Символизирует энергию, волю, активные действия, самоутверждение и сексуальность. " },
+            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/6/69/Uranus_Voyager2_color_calibrated.png", title: "Уран", tags: ['Интуиция', 'Перемены сознания'], nums: [5, 6, 2, 7, 4], text: "Символизирующая свободу, революционные перемены, озарения, технологии и независимость." },
+            { id: 4, src: "https://static.wikia.nocookie.net/rustarwars/images/4/4a/Alderaan.jpg/revision/latest?cb=20120529135204", title: "Альдераан", tags: ['Континентальный климат', 'Гуманоиды'], nums: [5, 6, 2, 7, 4], text: "Приятный теплый климат." },
+            { id: 5, src: "https://static.wikia.nocookie.net/project-hail-mary-andy-weir/images/b/bf/Erid_%28Movie%29.png/revision/latest?cb=20260327015426", title: "Эрида", tags: ['Сильное давление', 'Высокая температура'], nums: [10, 2, 3, 8, 1], text: "Полна интересной внеземной жизни" },
+            { id: 6, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Земля", tags: ['Стабильность', 'Надежность'], nums: [4, 9, 2, 5, 6], text: "Фундамент, отвечающий за материальную сферу и устойчивость. " },
         ];
     }
 
@@ -79,37 +82,49 @@ export class MainPage {
     }
 
     getHTML() {
-        return `
-            <div style="background-color: #050714; min-height: 100vh; padding-top: 20px;">
-                <div class="container">
-                    <div class="row g-3 mb-4 align-items-center">
-                        <div class="col-md-3">
-                            <h2 style="color: #ffcc33; margin: 0;">Наши услуги</h2>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="search-input" class="form-control"
-                                   style="background: #1a1b3a; border: 1px solid #4b4d8a; color: white !important;"
-                                   placeholder="Поиск по названию...">
-                        </div>
-                        <div class="col-md-3">
-                            <select id="tag-filter" class="form-select"
-                                    style="background: #1a1b3a; border: 1px solid #4b4d8a; color: white !important;">
-                                <option value="all">Все теги</option>
-                                <option value="Удача">Удача</option>
-                                <option value="Звезды">Звезды</option>
-                                <option value="Планеты">Планеты</option>
-                                <option value="Завтрак">Завтрак</option>
-                                <option value="Судьба">Судьба</option>
-                                <option value="Транзит">Транзит</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 text-end">
-                            <button id="add-card-btn" class="btn w-100" style="background-color: #ffcc33; color: #050714; font-weight: bold; border-radius: 10px;">Добавить</button>
-                        </div>
+    return `
+        <div style="background-color: black; min-height: 100vh; padding-top: 0px;">
+            <div class="container">
+                <div class="row g-3 mb-4 align-items-center">
+                    <div class="col-md-3">
+                        <h2 style="color: white; margin: 0;">Планеты</h2>
                     </div>
-                    <div id="main-page" class="row row-cols-1 row-cols-md-3 g-4 justify-content-start"></div>
+
+                    <div class="col-md-4">
+                        <input type="text" id="search-input" class="form-control"
+                               style="background: black; border: 1px solid white; color: white;"
+                               placeholder="Поиск...">
+                    </div>
+
+                    <div class="col-md-3">
+                        <select id="tag-filter" class="form-select"
+                                style="background: black; border: 1px solid white; color: white;">
+                            <option value="all">Все теги</option>
+                            <option value="Любовь и отношения">Любовь и отношения</option>
+                            <option value="Финансовая стабильность">Финансовая стабильность</option>
+                            <option value="Достижение">Достижение</option>
+                            <option value="Источник личной энергии">Источник личной энергии</option>
+                            <option value="Интуиция">Интуиция</option>
+                            <option value="Перемены сознания">Перемены сознания</option>
+                            <option value="Стабильность">Стабильность</option>
+                            <option value="Надежность">Надежность</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 text-end">
+                        <button id="add-card-btn"
+                            class="btn w-100"
+                            style="background: transparent; border: 1px solid white; color: white; border-radius: 10px;">
+                            Добавить
+                        </button>
+                    </div>
                 </div>
-            </div>`;
+
+                <div id="main-page"
+                     class="row row-cols-1 row-cols-md-3 g-4 justify-content-start">
+                </div>
+            </div>
+        </div>`;
     }
 
     render() {
