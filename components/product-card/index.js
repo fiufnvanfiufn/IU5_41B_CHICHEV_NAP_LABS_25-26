@@ -5,7 +5,7 @@ export class ProductCardComponent {
 
     concatenate(arr, separator) { return arr.join(separator); }
 
-    getMaxDiff(nums) {
+    getMaxDifferenceRadius(nums) {
         if (nums.length < 4) return 0;
         let sorted = [...nums].sort((a, b) => a - b);
         let n = sorted.length;
@@ -14,7 +14,7 @@ export class ProductCardComponent {
 
     getHTML(data) {
         const tagString = this.concatenate(data.tags, ' ');
-        const astroIndex = this.getMaxDiff(data.nums);
+        const astroIndex = this.getMaxDifferenceRadius(data.nums);
 
         return `
             <div class="col">

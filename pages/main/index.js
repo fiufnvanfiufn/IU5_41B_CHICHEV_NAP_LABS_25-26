@@ -4,11 +4,11 @@ import { ProductPage } from "../product/index.js";
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
-        this.data = this.getData();
+        this.data = this.PlanetList();
         this.filteredData = [...this.data];
     }
 
-    getData() {
+    PlanetList() {
         return [
             { id: 1, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/960px-Venus_from_Mariner_10.jpg", title: "Венера", tags: ['Любовь и отношения', 'Финансовая стабильность'], nums: [5, 6, 2, 7, 4], text: "Она определяет, как человек выражает чувства, его эстетические вкусы, отношение к материальным ценностям и выбор партнера."},
             { id: 2, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/960px-Mars_Valles_Marineris_EDIT.jpg", title: "Марс", tags: ['Достижение', 'Источник личной энергии'], nums: [5, 6, 2, 7, 4], text: "Символизирует энергию, волю, активные действия, самоутверждение и сексуальность. "},
@@ -27,23 +27,23 @@ export class MainPage {
             const productCard = new ProductCardComponent(productList);
             productCard.render(
                 item,
-                this.clickCard.bind(this),
-                this.onDeleteCard.bind(this),
-                this.onMoveToTop.bind(this)
+                this.clickPlanet.bind(this),
+                this.onDeletePlanet.bind(this),
+                this.MovePlanetToTop.bind(this)
             );
         });
     }
 
-    onMoveToTop(id) {
+    MovePlanetToTop(id) {
         const index = this.data.findIndex(item => item.id === id);
         if (index !== -1) {
             const element = this.data.splice(index, 1)[0];
             this.data.unshift(element);
-            this.filterData();
+            this.filterPlanets();
         }
     }
 
-    filterData() {
+    filterPlanets() {
         const searchValue = document.getElementById('search-input').value.toLowerCase();
         const tagValue = document.getElementById('tag-filter').value;
 
@@ -56,7 +56,7 @@ export class MainPage {
         this.renderProducts();
     }
 
-    onAddCard() {
+    onAddPlanet() {
         if (this.data.length > 0) {
             const firstItem = this.data[0];
             const newItem = {
@@ -65,16 +65,16 @@ export class MainPage {
                 title: `${firstItem.title}`
             };
             this.data.push(newItem);
-            this.filterData();
+            this.filterPlanets();
         }
     }
 
-    onDeleteCard(id) {
+    onDeletePlanet(id) {
         this.data = this.data.filter(item => item.id !== Number(id));
-        this.filterData();
+        this.filterPlanets();
     }
 
-    clickCard(e) {
+    clickPlanet(e) {
         const cardId = e.currentTarget.dataset.id || e.target.closest('button').dataset.id;
         const productPage = new ProductPage(this.parent, cardId, this.data);
         productPage.render();
@@ -134,9 +134,9 @@ export class MainPage {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML(), this.data);
 
-        document.getElementById('search-input').addEventListener('input', () => this.filterData());
-        document.getElementById('tag-filter').addEventListener('change', () => this.filterData());
-        document.getElementById('add-card-btn').addEventListener('click', () => this.onAddCard());
+        document.getElementById('search-input').addEventListener('input', () => this.filterPlanets());
+        document.getElementById('tag-filter').addEventListener('change', () => this.filterPlanets());
+        document.getElementById('add-card-btn').addEventListener('click', () => this.onAddPlanet());
 
         this.renderProducts();
     }
