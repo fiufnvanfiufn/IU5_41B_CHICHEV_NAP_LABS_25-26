@@ -7,8 +7,8 @@ window.onload = function() {
     let isAccumulativeMode = false
     let lastResult = ''
 
-    const outputElement = document.getElementById("oracle_output")
-    const digitButtons = document.querySelectorAll('[id ^= "star_"]')
+    const outputElement = document.getElementById("planet_output")
+    const digitButtons = document.querySelectorAll('[id ^= "planet_"]')
 
     function fact(n) {
         if (n < 0) return 'Ошибка'
@@ -39,12 +39,12 @@ window.onload = function() {
         }
     });
 
-    document.getElementById("orbit_mult").onclick = function() {
+    document.getElementById("cosmic_mult").onclick = function() {
         if (a === '') return
         selectedOperation = 'x'
     }
 
-    document.getElementById("orbit_plus").onclick = function() {
+    document.getElementById("cosmic_plus").onclick = function() {
         if (a === '') return
         if (selectedOperation === '+') {
             isAccumulativeMode = true
@@ -57,7 +57,7 @@ window.onload = function() {
         b = ''
     }
 
-    document.getElementById("orbit_minus").onclick = function() {
+    document.getElementById("cosmic_minus").onclick = function() {
         if (a === '') return
         if (selectedOperation === '-') {
             isAccumulativeMode = true
@@ -70,12 +70,12 @@ window.onload = function() {
         b = ''
     }
 
-    document.getElementById("orbit_div").onclick = function() {
+    document.getElementById("cosmic_div").onclick = function() {
         if (a === '') return
         selectedOperation = '/'
     }
 
-    document.getElementById("aspect_sign").onclick = function() {
+    document.getElementById("cosmic_sign").onclick = function() {
         if (!selectedOperation && a !== '') {
             a = ((+a) * -1).toString()
             outputElement.innerHTML = a
@@ -85,18 +85,7 @@ window.onload = function() {
         }
     }
 
-    document.getElementById("orbit_inverse").onclick = function() {
-        let target = (selectedOperation && b !== '') ? b : a
-        if (target === '' || (+target) === 0) {
-            outputElement.innerHTML = 'Ошибка'
-            return
-        }
-        let res = (1 / (+target)).toString()
-        if (!selectedOperation) a = res; else b = res;
-        outputElement.innerHTML = res
-    }
-
-    document.getElementById("cosmic_del").onclick = function() {
+    document.getElementById("cosmic_delete").onclick = function() {
         if (!selectedOperation && a !== '') {
             a = a.slice(0, -1)
             outputElement.innerHTML = a || '0'
@@ -106,7 +95,7 @@ window.onload = function() {
         }
     }
 
-    document.getElementById("orbit_sqrt").onclick = function() {
+    document.getElementById("cosmic_sqrt").onclick = function() {
         let target = (selectedOperation && b !== '') ? b : a
         if (target === '' || (+target) < 0) {
             outputElement.innerHTML = 'Ошибка'
@@ -117,7 +106,7 @@ window.onload = function() {
         outputElement.innerHTML = res
     }
 
-    document.getElementById("orbit_secdg").onclick = function() {
+    document.getElementById("cosmic_square").onclick = function() {
         let target = (selectedOperation && b !== '') ? b : a
         if (target === '') return
         let res = Math.pow((+target), 2).toString()
@@ -153,13 +142,13 @@ window.onload = function() {
         outputElement.innerHTML = a
     }
 
-    document.getElementById("oracle_equal").onclick = function() {
+    document.getElementById("cosmic_equal").onclick = function() {
         calculateResult()
         isAccumulativeMode = false
         selectedOperation = null
     }
 
-    document.getElementById("orbit_factorial").onclick = function() {
+    document.getElementById("cosmic_factorial").onclick = function() {
         let target = (selectedOperation && b !== '') ? b : a
         if (target === '') return
         let res = fact(+target).toString()
@@ -181,30 +170,38 @@ window.onload = function() {
         }
     }
 
-    document.getElementById("btn_get_moon").onclick = function() {
-    const dateInput = document.getElementById("moon_date_input").value;
-    if (!dateInput) {
-        document.getElementById("moon_result").innerHTML = "Введите дату!";
-        return;
+    let lunarOpen = false
+
+document.getElementById("cosmic_lunar").onclick = function() {
+    let input = (!selectedOperation || b === '') ? a : b
+
+    if (input.length !== 8) {
+        outputElement.innerHTML = "Формат: ГГГГММДД"
+        return
     }
 
-    const date = new Date(dateInput);
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
+    let year = parseInt(input.slice(0, 4))
+    let month = parseInt(input.slice(4, 6))
+    let day = parseInt(input.slice(6, 8))
+
+    if (month < 1 || month > 12 || day < 1 || day > 31) {
+        outputElement.innerHTML = "Ошибка даты"
+        return
+    }
 
     if (month < 3) {
-        year--;
-        month += 12;
+        year--
+        month += 12
     }
 
-    let c = 365.25 * year;
-    let e = 30.6 * month;
-    let jd = c + e + day - 694039.09;
-    jd /= 29.5305882;
-    let b = parseInt(jd);
-    jd -= b;
-    let phase = Math.round(jd * 8);
+    let c = 365.25 * year
+    let e = 30.6 * (month + 1)
+    let jd = c + e + day - 694039.09
+    jd /= 29.5305882
+
+    let tmp = parseInt(jd)
+    jd -= tmp
+    let phase = Math.round(jd * 8)
 
     const phases = [
         "Новолуние",
@@ -216,8 +213,8 @@ window.onload = function() {
         "Последняя четверть",
         "Старая луна",
         "Новолуние"
-    ];
+    ]
 
-    document.getElementById("moon_result").innerHTML = phases[phase];
-};
-};
+    outputElement.innerHTML = phases[phase]
+}
+}
