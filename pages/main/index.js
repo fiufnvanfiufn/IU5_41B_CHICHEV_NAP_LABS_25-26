@@ -10,12 +10,12 @@ export class MainPage {
 
     PlanetList() {
         return [
-            { id: 1, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/960px-Venus_from_Mariner_10.jpg", title: "Венера", tags: ['Любовь и отношения', 'Финансовая стабильность'], num: 5, text: "Она определяет, как человек выражает чувства, его эстетические вкусы, отношение к материальным ценностям и выбор партнера."},
-            { id: 2, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/960px-Mars_Valles_Marineris_EDIT.jpg", title: "Марс", tags: ['Достижение', 'Источник личной энергии'], num: 56, text: "Символизирует энергию, волю, активные действия, самоутверждение и сексуальность. "},
-            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/6/69/Uranus_Voyager2_color_calibrated.png", title: "Уран", tags: ['Интуиция', 'Перемены сознания'], num: 45, text: "Символизирующая свободу, революционные перемены, озарения, технологии и независимость."},
-            { id: 4, src: "https://static.wikia.nocookie.net/rustarwars/images/4/4a/Alderaan.jpg/revision/latest?cb=20120529135204", title: "Альдераан", tags: ['Континентальный климат', 'Гуманоиды'], num: 144, text: "Приятный теплый климат."},
-            { id: 5, src: "https://static.wikia.nocookie.net/project-hail-mary-andy-weir/images/b/bf/Erid_%28Movie%29.png/revision/latest?cb=20260327015426", title: "Эрида", tags: ['Сильное давление', 'Высокая температура'], num: 21, text: "Полна интересной внеземной жизни"},
-            { id: 6, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Земля", tags: ['Стабильность', 'Надежность'], num: 81, text: "Фундамент, отвечающий за материальную сферу и устойчивость. "},
+            { id: 1, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/960px-Venus_from_Mariner_10.jpg", title: "Венера", tags: 'Любовь и отношения', num: 5, text: "Она определяет, как человек выражает чувства, его эстетические вкусы, отношение к материальным ценностям и выбор партнера."},
+            { id: 2, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/960px-Mars_Valles_Marineris_EDIT.jpg", title: "Марс", tags: 'Достижение', num: 56, text: "Символизирует энергию, волю, активные действия, самоутверждение и сексуальность. "},
+            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/6/69/Uranus_Voyager2_color_calibrated.png", title: "Уран", tags: 'Интуиция', num: 45, text: "Символизирующая свободу, революционные перемены, озарения, технологии и независимость."},
+            { id: 4, src: "https://static.wikia.nocookie.net/rustarwars/images/4/4a/Alderaan.jpg/revision/latest?cb=20120529135204", title: "Альдераан", tags: 'Континентальный климат', num: 144, text: "Приятный теплый климат."},
+            { id: 5, src: "https://static.wikia.nocookie.net/project-hail-mary-andy-weir/images/b/bf/Erid_%28Movie%29.png/revision/latest?cb=20260327015426", title: "Эрида", tags: 'Сильное давление', num: 21, text: "Полна интересной внеземной жизни"},
+            { id: 6, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Земля", tags: 'Стабильность', num: 81, text: "Фундамент, отвечающий за материальную сферу и устойчивость. "},
         ];
     }
     renderProducts() {
