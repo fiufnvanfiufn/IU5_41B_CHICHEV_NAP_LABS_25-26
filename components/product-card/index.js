@@ -5,16 +5,13 @@ export class ProductCardComponent {
 
     concatenate(arr, separator) { return arr.join(separator); }
 
-    getMaxDifferenceRadius(nums) {
-        if (nums.length < 4) return 0;
-        let sorted = [...nums].sort((a, b) => a - b);
-        let n = sorted.length;
-        return (sorted[n-1] * sorted[n-2]) - (sorted[0] * sorted[1]);
+    getMaxDifferenceRadius(num) {
+        return num;
     }
 
     getHTML(data) {
         const tagString = this.concatenate(data.tags, ' ');
-        const astroIndex = this.getMaxDifferenceRadius(data.nums);
+        const astroIndex = this.getMaxDifferenceRadius(data.num);
 
         return `
             <div class="col">
@@ -53,11 +50,7 @@ export class ProductCardComponent {
 
                         <div class="d-flex flex-column gap-2">
 
-                            <button class="btn btn-sm"
-                                    id="move-${data.id}"
-                                    style="background: transparent; border: 1px solid white; color: white; border-radius: 10px;">
-                                В начало
-                            </button>
+
 
                             <div class="d-flex gap-2">
 
@@ -89,6 +82,5 @@ export class ProductCardComponent {
         // Добавляем обработчики
         document.getElementById(`click-${data.id}`).onclick = clickListener;
         document.getElementById(`delete-${data.id}`).onclick = () => deleteListener(data.id);
-        document.getElementById(`move-${data.id}`).onclick = () => moveListener(data.id);
     }
 }

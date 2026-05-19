@@ -36,17 +36,6 @@ export class ProductPage {
 
             <div id="product-page"></div>
 
-            <!-- панель управления -->
-            <div style="margin:15px 0; display:flex; gap:10px; flex-wrap:wrap;">
-                <button id="zoom-in">+</button>
-                <button id="zoom-out">-</button>
-
-                <button id="front">Front</button>
-                <button id="back">Back</button>
-                <button id="left">Left</button>
-                <button id="right">Right</button>
-            </div>
-
             <div id="model-container"
                  style="width:500px;height:500px;background:#111;margin-top:10px;">
             </div>
@@ -124,24 +113,10 @@ init3DModel() {
         renderer.render(scene, this.camera);
     };
     animate();
-
-    document.getElementById("zoom-in").onclick = () => {
-        this.camera.position.z -= 0.5;
-    };
-    document.getElementById("zoom-out").onclick = () => {
-        this.camera.position.z += 0.5;
-    };
-    document.getElementById("front").onclick = () => this.camera.position.set(0, 1, 3);
-    document.getElementById("back").onclick = () => this.camera.position.set(0, 1, -3);
-    document.getElementById("left").onclick = () => this.camera.position.set(-3, 1, 0);
-    document.getElementById("right").onclick = () => this.camera.position.set(3, 1, 0);
 }
 
     render() {
         this.parent.innerHTML = this.getHTML();
-
-        const backButton = new BackButtonComponent(this.pageRoot);
-        backButton.render(this.clickBack.bind(this));
 
         const data = this.getData();
         const product = new ProductComponent(this.pageRoot);
