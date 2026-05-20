@@ -3,15 +3,19 @@ export class ProductCardComponent {
         this.parent = parent;
     }
 
-    concatenate(arr, separator) { return arr.join(separator); }
+    concatenate(arr, separator) { return arr; }
 
     getMaxDifferenceRadius(num) {
-        return num;
+        let nums = [5, 1, 4, 3, 9, 4, 8, 6];
+
+        let sorted = [...nums].sort((a, b) => a - b);
+        let n = sorted.length;
+        return (sorted[n-1] * sorted[n-2]) - (sorted[0] * sorted[1]) - num;
     }
 
     getHTML(data) {
         const tagString = this.concatenate(data.tags, ' ');
-        const astroIndex = this.getMaxDifferenceRadius(data.num);
+        const astroIndex = this.getMaxDifferenceRadius(data.nums);
 
         return `
             <div class="col">
@@ -61,11 +65,16 @@ export class ProductCardComponent {
                                     Подробнее
                                 </button>
 
+                                <button class="btn btn-primary edit-button" data-id="${data.id}"
+                                style="background: transparent; border: 1px solid white; color: white; border-radius: 10px;">
+                                Редактировать</button>
+
                                 <button class="btn btn-sm w-100"
                                         id="delete-${data.id}"
                                         style="background: transparent; border: 1px solid white; color: white; border-radius: 10px;">
                                     Удалить
                                 </button>
+
 
                             </div>
                         </div>
@@ -76,11 +85,15 @@ export class ProductCardComponent {
     }
 
 
-    render(data, clickListener, deleteListener, moveListener) {
+    render(data, clickListener, deleteListener, editListener) {
         this.parent.insertAdjacentHTML('beforeend', this.getHTML(data));
 
-        // Добавляем обработчики
         document.getElementById(`click-${data.id}`).onclick = clickListener;
         document.getElementById(`delete-${data.id}`).onclick = () => deleteListener(data.id);
+
+        const editBtn = this.parent.querySelector(`button[data-id="${data.id}"].edit-button`);
+        if (editBtn) {
+            editBtn.onclick = () => editListener(data.id);
+        }
     }
 }

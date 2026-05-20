@@ -1,41 +1,123 @@
 import { ProductCardComponent } from "../../components/product-card/index.js";
 import { ProductPage } from "../product/index.js";
+import { EditPage } from "../edit/index.js";
+import { ajax } from "../../modules/ajax.js";
+import { planetListUrls } from "../../modules/planetListUrls.js";
 
 export class MainPage {
     constructor(parent) {
         this.parent = parent;
-        this.data = this.PlanetList();
-        this.filteredData = [...this.data];
+        this.data = [];
     }
 
-    PlanetList() {
-        return [
-            { id: 1, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/960px-Venus_from_Mariner_10.jpg", title: "Венера", tags: 'Любовь и отношения', num: 5, text: "Она определяет, как человек выражает чувства, его эстетические вкусы, отношение к материальным ценностям и выбор партнера."},
-            { id: 2, src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/960px-Mars_Valles_Marineris_EDIT.jpg", title: "Марс", tags: 'Достижение', num: 56, text: "Символизирует энергию, волю, активные действия, самоутверждение и сексуальность. "},
-            { id: 3, src: "https://upload.wikimedia.org/wikipedia/commons/6/69/Uranus_Voyager2_color_calibrated.png", title: "Уран", tags: 'Интуиция', num: 45, text: "Символизирующая свободу, революционные перемены, озарения, технологии и независимость."},
-            { id: 4, src: "https://static.wikia.nocookie.net/rustarwars/images/4/4a/Alderaan.jpg/revision/latest?cb=20120529135204", title: "Альдераан", tags: 'Континентальный климат', num: 144, text: "Приятный теплый климат."},
-            { id: 5, src: "https://static.wikia.nocookie.net/project-hail-mary-andy-weir/images/b/bf/Erid_%28Movie%29.png/revision/latest?cb=20260327015426", title: "Эрида", tags: 'Сильное давление', num: 21, text: "Полна интересной внеземной жизни"},
-            { id: 6, src: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png", title: "Земля", tags: 'Стабильность', num: 81, text: "Фундамент, отвечающий за материальную сферу и устойчивость. "},
-        ];
+    get pageRoot() {
+        return document.getElementById('product-list');
     }
-    renderProducts() {
-        const productList = document.getElementById('product-list');
-        if (!productList) return;
 
-        productList.innerHTML = '';
-        this.filteredData.forEach((item) => {
-            const productCard = new ProductCardComponent(productList);
+
+    getPlanet() {
+        ajax.get(planetListUrls.getPlanetList(), (data) => {
+            console.log('Данные с сервера:', data);
+            this.data = data;
+
+            if (!data || !Array.isArray(data) || data.length === 0) {
+                return;
+            }
+
+            if (this.pageRoot) {
+                this.pageRoot.innerHTML = '';
+            }
+
+            this.renderData(this.data);
+        });
+    }
+
+    renderData(items) {
+        if (!items) {
+            console.log("Рендеринг не запущен")
+            return;
+        }
+        items.forEach((item) => {
+            const productCard = new ProductCardComponent(this.pageRoot);
+
             productCard.render(
                 item,
                 this.clickPlanet.bind(this),
                 this.onDeletePlanet.bind(this),
-                this.MovePlanetToTop.bind(this)
+                (id) => this.openEditPage(id)
             );
         });
     }
 
+    render() {
+        this.parent.innerHTML = '';
+        const html = this.getHTML();
+        this.parent.insertAdjacentHTML('beforeend', html);
+
+        document.getElementById('search-btn')?.addEventListener('click', () => this.filterPlanets());
+        document.getElementById('add-card-btn')?.addEventListener('click', () => this.onAddPlanet());
+
+        this.getPlanet();
+    }
+
+    clickPlanet(e) {
+        const target = e.target;
+
+        if (target.classList.contains('delete-btn') || target.innerText.includes('Удалить')) {
+            const id = Number(target.dataset.id);
+            this.onDeletePlanet(id);
+            return;
+        }
+
+        const card = target.closest('[data-id]');
+        if (card) {
+            const cardId = Number(card.dataset.id);
+            const productPage = new ProductPage(this.parent, cardId, this.data);
+            productPage.render();
+        }
+
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                this.openEditPage(id);
+            });
+        });
+    }
+
+
+    filterPlanets() {
+        const searchValue = document.getElementById('search-input').value.trim();
+        const tagValue = document.getElementById('tag-filter').value;
+
+        let url = planetListUrls.getPlanetList();
+
+        const params = [];
+
+        if (searchValue) {
+            params.push(`search=${encodeURIComponent(searchValue)}`);
+        }
+
+        if (tagValue && tagValue !== 'all') {
+            params.push(`tag=${encodeURIComponent(tagValue)}`);
+        }
+
+        if (params.length > 0) {
+            url += `?${params.join('&')}`;
+        }
+
+        ajax.get(url, (filteredData) => {
+            if (this.pageRoot) {
+                this.pageRoot.innerHTML = '';
+            }
+
+
+            this.renderData(filteredData);
+        });
+    }
+
     MovePlanetToTop(id) {
-        const index = this.data.findIndex(item => item.id === id);
+        const index = this.data.findIndex(item => Number(item.id) === id);
         if (index !== -1) {
             const element = this.data.splice(index, 1)[0];
             this.data.unshift(element);
@@ -43,54 +125,76 @@ export class MainPage {
         }
     }
 
-    filterPlanets() {
-        const searchValue = document.getElementById('search-input').value.toLowerCase();
-        const tagValue = document.getElementById('tag-filter').value;
 
-        this.filteredData = this.data.filter(item => {
-            const matchesSearch = item.title.toLowerCase().includes(searchValue);
-            const matchesTag = tagValue === 'all' || item.tags.includes(tagValue);
-            return matchesSearch && matchesTag;
+
+    onAddPlanet = () => {
+        if (!this.data || this.data.length === 0) {
+            alert('Нет данных для клонирования');
+            return;
+        }
+
+        const firstItem = this.data[0];
+        const newItemData = {
+            src: firstItem.src,
+            title: `${firstItem.title} (Новая)`,
+            nums: firstItem.nums,
+            tags:firstItem.tags,
+            text: firstItem.text || firstItem.description || ""
+        };
+
+        const url = planetListUrls.getPlanetList();
+
+        ajax.post(url, newItemData, (response) => {
+            console.log('Планета создана:', response);
+
+            if (this.pageRoot) {
+                this.pageRoot.innerHTML = '';
+            }
+
+            this.getPlanet();
         });
+    };
 
-        this.renderProducts();
+    onUpdatePlanet(id, updatedData) {
+        const url = `${planetListUrls.getPlanetList()}/${id}`;
+
+        ajax.patch(url, updatedData, (response) => {
+
+            this.getPlanet();
+        });
     }
 
-    onAddPlanet() {
-        if (this.data.length > 0) {
-            const firstItem = this.data[0];
-            const newItem = {
-                ...firstItem,
-                id: Date.now(),
-                title: `${firstItem.title}`
-            };
-            this.data.push(newItem);
-            this.filterPlanets();
-        }
+
+
+    openEditPage(id) {
+        this.parent.innerHTML = '';
+
+        const editPage = new EditPage(this.parent, id, () => {
+            this.parent.innerHTML = '';
+            this.render();
+        });
+
+        editPage.getPlanet();
     }
 
     onDeletePlanet(id) {
-        this.data = this.data.filter(item => item.id !== Number(id));
-        this.filterPlanets();
-    }
+        const url = `${planetListUrls.getPlanetList()}/${id}`;
 
-    clickPlanet(e) {
-        const cardId = e.currentTarget.dataset.id || e.target.closest('button').dataset.id;
-        const productPage = new ProductPage(this.parent, cardId, this.data);
-        productPage.render();
+        ajax.delete(url, (response) => {
+            console.log(`Планета с id ${id} успешно удалена на сервере`);
+
+            this.getPlanet();
+        });
     }
 
     getHTML() {
-    return `
+        return `
         <div style="background-color: black; min-height: 100vh; padding-top: 0px;">
             <div class="container">
-
                 <div class="row g-3 mb-4 align-items-center">
-
                     <div class="col-md-4">
                         <h2 style="color: white; margin: 0;">Наши услуги</h2>
                     </div>
-
                     <div class="col-md-4">
                         <div class="input-group">
                             <input type="text" id="search-input" class="form-control"
@@ -102,48 +206,27 @@ export class MainPage {
                             </button>
                         </div>
                     </div>
-
                     <div class="col-md-3">
                         <select id="tag-filter" class="form-select"
                                 style="background: black; border: 1px solid white; color: white;">
                             <option value="all">Все теги</option>
                             <option value="Любовь и отношения">Любовь и отношения</option>
-                            <option value="Финансовая стабильность">Финансовая стабильность</option>
                             <option value="Достижение">Достижение</option>
-                            <option value="Источник личной энергии">Источник личной энергии</option>
                             <option value="Интуиция">Интуиция</option>
-                            <option value="Перемены сознания">Перемены сознания</option>
+                            <option value="Континентальный климат">Континентальный климат</option>
+                            <option value="Сильное давление">Сильное давление</option>
                             <option value="Стабильность">Стабильность</option>
-                            <option value="Надежность">Надежность</option>
                         </select>
                     </div>
-
                     <div class="col-md-1">
-                        <button id="add-card-btn"
-                            class="btn w-100"
-                            style="background: transparent; border: 1px solid white; color: white;">
+                        <button id="add-card-btn" class="btn w-100"
+                                style="background: transparent; border: 1px solid white; color: white;">
                             Добавить
                         </button>
                     </div>
-
                 </div>
-
-                <div id="product-list"
-                     class="row row-cols-1 row-cols-md-3 g-4">
-                </div>
-
+                <div id="product-list" class="row row-cols-1 row-cols-md-3 g-4"></div>
             </div>
         </div>`;
-    }
-
-    render() {
-        this.parent.innerHTML = '';
-        this.parent.insertAdjacentHTML('beforeend', this.getHTML(), this.data);
-
-        document.getElementById('search-btn').addEventListener('click', () => this.filterPlanets());
-        document.getElementById('tag-filter').addEventListener('change', () => this.filterPlanets());
-        document.getElementById('add-card-btn').addEventListener('click', () => this.onAddPlanet());
-
-        this.renderProducts();
     }
 }

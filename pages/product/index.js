@@ -1,5 +1,5 @@
 import { ProductComponent } from "../../components/product/index.js";
-import { BackButtonComponent } from "../../components/back-button/index.js";
+import { EditButtonComponent } from "../../components/edit-btn/index.js";
 import { MainPage } from "../main/index.js";
 
 import * as THREE from "three";
@@ -15,6 +15,9 @@ export class ProductPage {
         this.model = null;
         this.controls = null;
         this.camera = null;
+
+        this.isEditing = false;
+        this.editButton = null;
     }
 
     getData() {
@@ -43,29 +46,27 @@ export class ProductPage {
         </div>`;
     }
 
-init3DModel() {
-    console.log("init3DModel started");
+    init3DModel() {
+        const container = document.getElementById("model-container");
+        if (!container) return console.error("No container");
 
-    const container = document.getElementById("model-container");
-    if (!container) return console.error("No container");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xdddddd);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xdddddd);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(5, 5, 5);
-    scene.add(dirLight);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-    this.camera = new THREE.PerspectiveCamera(
-        75,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        1000
-    );
-    this.camera.position.set(0, 1, 3);
+        this.camera = new THREE.PerspectiveCamera(
+            75,
+            container.clientWidth / container.clientHeight,
+            0.1,
+            1000
+        );
+        this.camera.position.set(0, 1, 3);
 
     const updateSize = () => {
         const width = container.clientWidth;
@@ -121,6 +122,7 @@ init3DModel() {
         const data = this.getData();
         const product = new ProductComponent(this.pageRoot);
         product.render(data);
+
 
         this.init3DModel();
     }
