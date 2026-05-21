@@ -36,10 +36,6 @@ export class EditPage {
                         <label class="form-label">Описание</label>
                         <textarea class="form-control" id="edit-text" rows="3">${data.text || ""}</textarea>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Теги</label>
-                        <input type="text" class="form-control" id="edit-tags" value="${tagsValue}">
-                    </div>
                     <button type="submit" class="btn btn-success">Сохранить изменения</button>
                 </form>
             </div>
@@ -50,13 +46,11 @@ export class EditPage {
         const title = document.getElementById('edit-title').value;
         const src = document.getElementById('edit-src').value;
         const text = document.getElementById('edit-text').value;
-        const tags = document.getElementById('edit-tags').value;
 
         const updatedData = {
             title,
             src,
             text,
-            tags,
             nums: this.currentNums
         };
 
