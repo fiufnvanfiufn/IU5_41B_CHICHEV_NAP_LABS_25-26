@@ -14,22 +14,16 @@ export class MainPage {
         return document.getElementById('product-list');
     }
 
+    async getPlanet() {
+        const data = await new Promise((resolve) => ajax.get(planetListUrls.getPlanetList(), resolve));
 
-    getPlanet() {
-        ajax.get(planetListUrls.getPlanetList(), (data) => {
-            console.log('Данные с сервера:', data);
-            this.data = data;
+        console.log('Данные с сервера:', data);
+        this.data = data;
 
-            if (!data || !Array.isArray(data) || data.length === 0) {
-                return;
-            }
+        if (!data || !Array.isArray(data) || data.length === 0) return;
 
-            if (this.pageRoot) {
-                this.pageRoot.innerHTML = '';
-            }
-
-            this.renderData(this.data);
-        });
+        if (this.pageRoot) this.pageRoot.innerHTML = '';
+        this.renderData(this.data);
     }
 
     renderData(items) {
@@ -85,21 +79,15 @@ export class MainPage {
         });
     }
 
-
     filterPlanets() {
         const searchValue = document.getElementById('search-input').value.trim();
-        const tagValue = document.getElementById('tag-filter').value;
 
         let url = planetListUrls.getPlanetList();
 
         const params = [];
 
         if (searchValue) {
-            params.push(`search=${encodeURIComponent(searchValue)}`);
-        }
-
-        if (tagValue && tagValue !== 'all') {
-            params.push(`tag=${encodeURIComponent(tagValue)}`);
+            params.push(`title=${encodeURIComponent(searchValue)}`);
         }
 
         if (params.length > 0) {
@@ -110,7 +98,6 @@ export class MainPage {
             if (this.pageRoot) {
                 this.pageRoot.innerHTML = '';
             }
-
 
             this.renderData(filteredData);
         });
@@ -125,11 +112,16 @@ export class MainPage {
         }
     }
 
+    async onUpdatePlanet(id, updatedData) {
+        const url = `${planetListUrls.getPlanetList()}/${id}`;
 
+        await new Promise((resolve) => ajax.patch(url, updatedData, resolve));
 
-    onAddPlanet = () => {
+        this.getPlanet();
+    }
+
+    async onAddPlanet() {
         if (!this.data || this.data.length === 0) {
-            alert('Нет данных для клонирования');
             return;
         }
 
@@ -138,32 +130,21 @@ export class MainPage {
             src: firstItem.src,
             title: `${firstItem.title} (Новая)`,
             nums: firstItem.nums,
-            tags:firstItem.tags,
             text: firstItem.text || firstItem.description || ""
         };
 
         const url = planetListUrls.getPlanetList();
 
-        ajax.post(url, newItemData, (response) => {
-            console.log('Планета создана:', response);
+        await new Promise((resolve) => ajax.post(url, newItemData, resolve));
 
-            if (this.pageRoot) {
-                this.pageRoot.innerHTML = '';
-            }
+        console.log('Планета успешно создана');
 
-            this.getPlanet();
-        });
-    };
+        if (this.pageRoot) {
+            this.pageRoot.innerHTML = '';
+        }
 
-    onUpdatePlanet(id, updatedData) {
-        const url = `${planetListUrls.getPlanetList()}/${id}`;
-
-        ajax.patch(url, updatedData, (response) => {
-
-            this.getPlanet();
-        });
+        this.getPlanet();
     }
-
 
 
     openEditPage(id) {
@@ -177,14 +158,13 @@ export class MainPage {
         editPage.getPlanet();
     }
 
-    onDeletePlanet(id) {
+    async onDeletePlanet(id) {
         const url = `${planetListUrls.getPlanetList()}/${id}`;
 
-        ajax.delete(url, (response) => {
-            console.log(`Планета с id ${id} успешно удалена на сервере`);
+        await new Promise((resolve) => ajax.delete(url, resolve));
 
-            this.getPlanet();
-        });
+        console.log(`Планета с id ${id} удалена`);
+        this.getPlanet();
     }
 
     getHTML() {
@@ -192,10 +172,10 @@ export class MainPage {
         <div style="background-color: black; min-height: 100vh; padding-top: 0px;">
             <div class="container">
                 <div class="row g-3 mb-4 align-items-center">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <h2 style="color: white; margin: 0;">Наши услуги</h2>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="input-group">
                             <input type="text" id="search-input" class="form-control"
                                    style="background: black; border: 1px solid white; color: white;"
@@ -205,18 +185,6 @@ export class MainPage {
                                 Найти
                             </button>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <select id="tag-filter" class="form-select"
-                                style="background: black; border: 1px solid white; color: white;">
-                            <option value="all">Все теги</option>
-                            <option value="Любовь и отношения">Любовь и отношения</option>
-                            <option value="Достижение">Достижение</option>
-                            <option value="Интуиция">Интуиция</option>
-                            <option value="Континентальный климат">Континентальный климат</option>
-                            <option value="Сильное давление">Сильное давление</option>
-                            <option value="Стабильность">Стабильность</option>
-                        </select>
                     </div>
                     <div class="col-md-1">
                         <button id="add-card-btn" class="btn w-100"
