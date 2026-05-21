@@ -4,9 +4,9 @@
   width: 60px;
   height: 60px;
   border-radius: 14px;
-  border: none;
-  background: #2d2f5a;
-  color: #d1d1e9;
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
   font-size: 1.5rem;
   font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
@@ -16,7 +16,7 @@
 }
 
 .my-btn:hover {
-  background: #3e4182;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .my-btn:active {
@@ -24,18 +24,19 @@
 }
 
 .my-btn.primary {
-  background: #5d3f8a;
+  background: transparent;
 }
 
 .my-btn.secondary {
-  background: #121432;
+  background: transparent;
 }
 
 .my-btn.execute {
   width: 135px;
   border-radius: 34px;
-  background: #c5a021;
-  color: #0b0e21;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
 }
 
 .calculator {
@@ -44,12 +45,12 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  border: 3px solid #4b4d8a;
+  border: 3px solid #ffffff;
   border-radius: 28px;
   width: fit-content;
   margin: 20px auto;
-  background-color: #1a1b3a;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  background-color: #000000;
+  box-shadow: 0 20px 50px rgba(255, 255, 255, 0.1);
 }
 
 .result {
@@ -58,16 +59,16 @@
   margin-bottom: 15px;
   padding-right: 15px;
   border-radius: 18px;
-  background: #050714;
+  background: #000000;
   text-align: right;
-  color: #ffcc33;
+  color: #ffffff;
   font-size: 2.5rem;
   font-family: 'Times New Roman', Times, serif;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   box-sizing: border-box;
-  border: 1px solid #4b4d8a;
+  border: 1px solid #ffffff;
 }
 
 .git_btn {
@@ -79,11 +80,12 @@
   justify-content: center;
   margin-bottom: 15px;
   border-radius: 12px;
-  background: #2d2f5a;
-  color: #d1d1e9;
+  background: #000000;
+  color: #ffffff;
   font-size: 1.1rem;
   font-family: Arial, Helvetica, sans-serif;
   transition: 0.3s;
+  border: 1px solid #ffffff;
 }
 
 .lab-purpose {
@@ -92,18 +94,18 @@
   left: 10px;
   margin-top: 20px;
   padding: 15px;
-  background-color: #1a1b3a;
-  border: 1px solid #5d3f8a;
+  background-color: #000000;
+  border: 1px solid #ffffff;
   border-radius: 16px;
-  color: #d1d1e9;
+  color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
   max-width: 500px;
 }
 
 .lab-purpose mark {
-  background-color: #5d3f8a;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
   padding: 2px 5px;
   border-radius: 3px;
   font-weight: bold;
@@ -112,10 +114,10 @@
 .switch_theme {
   width: 160px;
   height: 45px;
-  border: 1px solid #4b4d8a;
+  border: 1px solid #ffffff;
   border-radius: 25px;
-  background: #2d2f5a;
-  color: #d1d1e9;
+  background: transparent;
+  color: #ffffff;
   cursor: pointer;
   font-size: 1rem;
   transition: 0.3s;
@@ -134,9 +136,9 @@
 }
 
 #author_scroll {
-  background-color: #1a1b3a;
-  color: #d1d1e9;
-  border: 1px solid #4b4d8a;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 8px;
   padding: 12px 15px;
   width: 240px;
@@ -144,5 +146,6 @@
 }
 
 body {
-  background-color: #0b0e21;
+  background-color: #000000;
+  color: #ffffff;
 }
